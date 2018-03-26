@@ -52,7 +52,6 @@ class HoursCounter extends Component {
     let totalDuration = allSongs.reduce((sum,eachSong) =>{
       return sum + eachSong.duration
     },0)
-    console.log(allSongs)
     return (<div style={{
         ...defaultStyle,
         width: "40%",
@@ -76,17 +75,18 @@ class Filter extends Component {
 }
 class Playlists extends Component {
   render() {
+    let playlist = this.props.playlist
     return (<div style={{
         ...defaultStyle,
         width: "25%",
         display: "inline-block"
       }}>
-      <h3>
-        Name</h3>
+      <h3>{playlist.name}</h3>
       <ul>
-        <li>song 1</li>
-        <li>song 2</li>
-        <li>song 3</li>
+        {playlist.songs.map(song =>
+          <li>{song.name}</li>
+        )}
+
 
       </ul>
     </div>);
@@ -94,7 +94,7 @@ class Playlists extends Component {
 }
 class App extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
       serverData: {}
     }
@@ -117,13 +117,15 @@ class App extends Component {
             <PlaylistCounter playlists={this.state.serverData.user.playlists}/>
             <HoursCounter playlists={this.state.serverData.user.playlists}/>
             <Filter/>
-            <Playlists/>
-            <Playlists/>
-            <Playlists/>
-            <Playlists/>
+
+            {
+              this.state.serverData.user.playlists.map(playlist =>
+                <Playlists playlist={playlist}/>
+              )
+            }
           </div> : <h1 style={defaultStyle}>loading</h1>
       }
-    </div>);
+    </div>)
   }
 }
 
